@@ -1,0 +1,21 @@
+version: '3'
+services:
+  web:
+    image: valiyon/my-nginx
+    volumes:
+      # - /home/vcoman/nginx/sites-enabled:/etc/nginx/conf.d
+      - /home/valentins/nginx/sites-available:/etc/nginx/conf.d
+      - /etc/ssl/certs/localhost.crt:/etc/ssl/certs/localhost.crt
+      - /etc/ssl/private/localhost.key:/etc/ssl/private/localhost.key  
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    network_mode: "host"
+  dummy:
+    image: valiyon/my-dummy
+    depends_on: 
+      - web
+    volumes:
+      - /home/valentins/simple-sinatra-app.service:/etc/systemd/system/simple-sinatra-app.service
+    ports:
+      - 5000:5000
